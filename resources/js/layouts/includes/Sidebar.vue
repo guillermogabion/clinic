@@ -8,12 +8,14 @@
    >
    
     <v-list-item class="px-2 pt-2">
-        <v-img
+        <!-- <v-img
         color="primary"
         size="40"
         :src="logocard"
         >
-        </v-img>
+        </v-img> -->
+
+        <span class="sidebar_title">Dental Clinic</span>
     </v-list-item>
    
     <v-list
@@ -51,10 +53,11 @@ export default {
         logocard,
         items : [
             {title : 'Dashboard', icon: 'mdi-view-dashboard', route: '/'},
-            {title : 'Items', icon: 'mdi-view-dashboard', route: '/allitems'},
-            {title : 'Participants', icon: 'mdi mdi-account-group', route: '/attendee'},
-            {title : 'Events', icon: 'mdi mdi-account-group', route: '/event'},
-            {title : 'Settings', icon: 'mdi-view-dashboard', route: '/setting'},
+            {title : 'Patients', icon: 'mdi mdi-account-group', route: '/attendee'},
+            {title : 'Appointments', icon: 'mdi mdi-account-group', route: '/event'},
+            {title : 'Inventory', icon: 'mdi-view-dashboard', route: '/allitems'},
+            {title : 'Service', icon: 'mdi-view-dashboard', route: '/service'},
+            // {title : 'Settings', icon: 'mdi-view-dashboard', route: '/setting'},?
         //     {
         //         icon: 'mdi mdi-notebook-multiple',
         //         'icon-alt': 'mdi mdi-notebook-multiple',
@@ -181,6 +184,11 @@ export default {
 
 .v-list-group.tile > div:first-child:hover {
   background:#EF7922 !important;
+}
+.sidebar_title{
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 </style>

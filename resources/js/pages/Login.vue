@@ -13,7 +13,8 @@
                     color="white"
                     >
                     <v-card>
-                        <div
+                        
+                        <!-- <div
                          style="padding-top: 4%"
                         >
                         <v-img 
@@ -23,7 +24,8 @@
                         width="50%"
                         class="mx-auto"
                         />
-                    </div>
+                    </div> -->
+                    <span class="login_title">Dental Clinic</span>
 
                     <v-col>
                         <v-text-field
@@ -57,13 +59,13 @@
                             >
                                 Login
                             </v-btn>
-                            <v-btn
+                            <!-- <v-btn
                                 rounded
                                 color="primary"
                                 class= "mb-2 px-3"
                             >
                                 Register
-                            </v-btn>
+                            </v-btn> -->
                         <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-col>
@@ -145,6 +147,11 @@ body {
 
 .login {
     padding-top: 10%;
+}
+.login_title{
+    font-size: 50px;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 

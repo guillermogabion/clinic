@@ -21,6 +21,8 @@ import Attendance from '../pages/Attendance.vue'
 
 import AllItems from '../pages/Items/index.vue'
 
+import Service from '../pages/Admin/Service/index'
+
 
 export default [{
     path: '/',
@@ -67,6 +69,13 @@ export default [{
             path: '/attendee/add',
             name: 'attendee-add',
             component: AddEmployee,
+            meta: { authOnly: true },
+        },
+
+        {
+            path: '/service',
+            name: 'service',
+            component: Service,
             meta: { authOnly: true },
         },
 

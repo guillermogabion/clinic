@@ -36,7 +36,7 @@
                         :items="participants"
                         v-model="search"
                     ></v-text-field>
-                    <div
+                    <!-- <div
                     class="pt-1"
                     >
                         <v-btn
@@ -56,7 +56,7 @@
                             </v-icon>
                           </v-btn>
                               
-                        </div>
+                        </div> -->
                 </v-toolbar>
                 </template>
                 
@@ -83,9 +83,10 @@
      dialogDelete: false,
      headers: [
        { text: 'Fullname', align: 'start', sortable: false, value: 'fullname',},
+       { text: 'Gender', value: 'gender' },
+       { text: 'Age', value: 'age' },
        { text: 'Address', value: 'address' },
        { text: 'Contact', value: 'contact' },
-       { text: 'Designation', value: 'designation' },
        { text: 'Actions', value: 'actions', sortable: false },
      ],
      loading: false,

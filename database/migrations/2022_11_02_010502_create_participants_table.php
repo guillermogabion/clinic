@@ -16,10 +16,14 @@ class CreateParticipantsTable extends Migration
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
+            $table->string('mid_name');
             $table->string('last_name');
+            $table->string('birthdate');
+            $table->string('age');
+            $table->boolean('med_history')->default(false);
+            $table->boolean('den_history')->default(false);
             $table->string('address');
             $table->string('contact');
-            $table->integer('designation')->unsigned();
             $table->timestamps();
         });
     }

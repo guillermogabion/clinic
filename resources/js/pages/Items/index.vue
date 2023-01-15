@@ -31,7 +31,7 @@
                         class="mx-4 mt-5"
                     ></v-text-field>
                     </v-col>
-                    <v-col
+                    <!-- <v-col
                     class="ma-2"
                     >
                         <v-select
@@ -43,7 +43,7 @@
                         dense
                         
                         ></v-select>
-                    </v-col>
+                    </v-col> -->
                 </v-row>
                
             </v-row>

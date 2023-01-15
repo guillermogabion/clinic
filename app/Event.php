@@ -18,4 +18,9 @@ class Event extends Model
     {
         return $this->hasMany(Record::class);
     }
+
+    public function service_rend()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
 }

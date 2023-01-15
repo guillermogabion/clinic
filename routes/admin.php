@@ -7,7 +7,7 @@ use App\Http\Controllers\RecordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
-
+use App\Http\Controllers\ServiceController;
 
 Route::group(['prefix' => '/v1'], function () {
     Route::post('login', [UserController::class, 'login'])->name('login');
@@ -44,4 +44,13 @@ Route::group(['prefix' => '/v1', 'middleware' => ['auth:admin-api']], function (
     Route::post('items-search', [ItemController::class, 'search']);
 
     Route::get('get', [RecordController::class, 'get']);
+
+    // dashboard 
+
+    Route::get('count_appointment', [EventController::class, 'count_all']);
+    Route::get('count_appointment_today', [EventController::class, 'count_today']);
+    Route::get('count_item', [ItemController::class, 'count_all']);
+
+    Route::get('get_all_services', [ServiceController::class, 'get_all']);
+    Route::get('get_all_reserve', [ServiceController::class, 'get_reserve']);
 });

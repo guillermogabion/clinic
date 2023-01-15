@@ -35,7 +35,7 @@
                         :items="event"
                         v-model="search"
                     ></v-text-field>
-                    <div
+                    <!-- <div
                     class="pt-1"
                     >
                         <v-btn
@@ -55,7 +55,7 @@
                             </v-icon>
                           </v-btn>
                               
-                        </div>
+                        </div> -->
                 </v-toolbar>
                 </template>
                 
@@ -81,9 +81,10 @@
      dialog: false,
      dialogDelete: false,
      headers: [
-       { text: 'Title', align: 'start', sortable: false, value: 'name',},
-       { text: 'Start', align: 'start', sortable: false, value: 'start',},
-       { text: 'End', align: 'start', sortable: false, value: 'end',},
+       { text: 'Patient', align: 'start', sortable: false, value: 'fullname',},
+       { text: 'Service', align: 'start', sortable: false, value: 'service',},
+       { text: 'Date', align: 'start', sortable: false, value: 'date',},
+       { text: 'Action', align: 'start', sortable: false, value: 'actions',},
     //    { text: 'Title', align: 'start', sortable: false, value: 'name',},yyttt
       
      ],

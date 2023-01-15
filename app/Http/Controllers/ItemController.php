@@ -59,4 +59,9 @@ class ItemController extends Controller
         }
         return $data->orderBy('name', 'desc')->get();
     }
+
+    public function count_all()
+    {
+        return Item::count();
+    }
 }

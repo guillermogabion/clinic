@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -57,5 +58,14 @@ class EventController extends Controller
             });
         }
         return $data->orderBy('name', 'asc')->paginate(10);
+    }
+
+    public function count_all()
+    {
+        return Event::count();
+    }
+    public function count_today()
+    {
+        return Event::whereDate('date', Carbon::today())->count();
     }
 }
