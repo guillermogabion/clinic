@@ -14,28 +14,37 @@ class ServiceSeeder extends Seeder
     {
         //
         Services::create([
-            "name" => "Oral Prophylaxis"
+            "name" => "Oral Prophylaxis",
+            "duration" => "20-40 mins"
         ]);
         Services::create([
-            "name" => "Fluoride Varnishs"
+            "name" => "Fluoride Varnishs",
+            "duration" => "2-5 mins"
         ]);
         Services::create([
-            "name" => "Tooth Restoration"
+            "name" => "Tooth Restoration",
+            "duration" => "15-30 mins"
         ]);
         Services::create([
-            "name" => "Tooth Extraction"
+            "name" => "Tooth Extraction",
+            "duration" => "5-30 mins"
         ]);
         Services::create([
-            "name" => "Dentures"
+            "name" => "Dentures",
+            "duration" => ""
+
         ]);
         Services::create([
-            "name" => "Whitening"
+            "name" => "Whitening",
+            "duration" => "60-90 mins"
         ]);
         Services::create([
-            "name" => "Gingivectomy"
+            "name" => "Gingivectomy",
+            "duration" => "30-60 mins"
         ]);
         Services::create([
-            "name" => "Braces"
+            "name" => "Braces",
+            "duration" => "2 hrs"
         ]);
     }
 }

@@ -52,7 +52,9 @@ class UserController extends Controller
         $data->email = $request->email;
         $data->password =  Hash::make($request->password);
         $data->medical = $request->medical;
+        $data->medical_record = $request->medical_record;
         $data->dental = $request->dental;
+        $data->dental_record = $request->dental_record;
 
         $data->save();
 

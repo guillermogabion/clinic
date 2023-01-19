@@ -18,7 +18,10 @@ class CreateEventsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('service_id')->unsigned();
             $table->string('date_reserve');
+            $table->string('time');
+            $table->string('cost');
             $table->boolean('status')->default(0);
+            $table->boolean('ispaid')->default(0);
             $table->timestamps();
         });
     }

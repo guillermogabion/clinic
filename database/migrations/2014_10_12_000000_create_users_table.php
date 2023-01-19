@@ -25,7 +25,9 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('medical')->default(0);
+            $table->string('medical_record')->nullable();
             $table->boolean('dental')->default(0);
+            $table->string('dental_record')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

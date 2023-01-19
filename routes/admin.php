@@ -60,4 +60,7 @@ Route::group(['prefix' => '/v1', 'middleware' => ['auth:admin-api']], function (
 
     // Dashboard 
     Route::post('monthly-stats', 'DashboardController@charts');
+
+
+    Route::get('get-history', 'EventController@get_all_history');
 });

@@ -147,10 +147,21 @@
                                         label="Do you have medical concerns?"
                                         class="align-label"
                                     ></v-checkbox>
+
+                                    <v-text-field 
+                                    v-if="payload.medical == true"
+                                    outlined
+                                    v-model="payload.medical_record"
+                                    ></v-text-field>
                                     <v-checkbox
                                         v-model="payload.dental"
                                         label="Do you have dental history?"
                                     ></v-checkbox>
+                                    <v-text-field 
+                                    v-if="payload.dental == true"
+                                    outlined
+                                    v-model="payload.dental_record"
+                                    ></v-text-field>
                                 </v-sheet>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
@@ -167,6 +178,7 @@
                             </v-form>
                         </v-card>
                     </v-dialog>
+                   
                 </div>
      
     </v-sheet>
@@ -217,7 +229,9 @@ export default {
             email : '',
             password : '',
             medical: false,
-            dental : false
+            dental : false,
+            medical_record: '',
+            dental_record : '',
         },
         firstRules: [
             v => !!v || 'First Name is required',
@@ -279,6 +293,7 @@ export default {
                         console.log(data.data)
                         this.$refs.form.reset()
                         this.$refs.form.resetValidation()
+                        alert('Account successfully made.');
                         this.dialog = false
                     })
                     this.dialog = true;

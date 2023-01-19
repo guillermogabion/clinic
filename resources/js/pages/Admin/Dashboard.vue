@@ -57,7 +57,7 @@
     <div class="text-center">
 
             <v-card
-                width="500"
+                width="1000"
                 class="mx-auto"
                 elevation="3"
                 color="white"
@@ -94,19 +94,52 @@
                             dense
                             readonly
                         ></v-text-field>
-                        <v-date-picker 
-                            v-model="payload.picker" 
-                            :allowed-dates="isNotWeekend"></v-date-picker>
+                        <v-text-field 
+                            v-model="payload.time"
+                            filled
+                            rounded
+                            dense
+                            readonly
+                        ></v-text-field>
+                      
+                        <v-row>
+                            <v-col>
+                                <v-date-picker 
+                                v-model="payload.picker" 
+                                :allowed-dates="isNotWeekend"></v-date-picker>
+                            </v-col>
+                            <v-col>
+                                <v-time-picker
+                                v-model="payload.time"
+                                no-title
+                                format="ampm"
+                                ></v-time-picker>
+                            </v-col>
+                        </v-row>
+                        <span>Service Cost : {{ this.service.price }}</span><br>
+                        <span>Appointment Fee : 100Php</span>
+                        <span style="display: none;">{{ this.payload.cost = this.service.price + 100 }}</span>
+                        <v-text-field 
+                            v-model="payload.cost"
+                            filled
+                            rounded
+                            dense
+                            readonly
+                            label="Total Cost"
+                        ></v-text-field>
+                       
                         <v-card-actions>
                         <v-spacer></v-spacer>
                           <v-btn
                           @click="addAppointment()"
+                          @click.prevent="alert=true"
                           color="primary"
                           >Submit</v-btn>
                         <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-col>
                 </v-card>
+               
             </v-card>
         </div>
     </div>
@@ -139,9 +172,9 @@ export default {
             payload : {
                 service: [],
                 picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-
-            }
-            
+                time : ''
+            },
+            alert: false
             
            
    
@@ -227,6 +260,7 @@ export default {
         addAppointment(){
             addAppointment(this.payload).then(response => {
                 console.log(response.data)
+                alert('Appointment request Submitted');
             })
         }
        
