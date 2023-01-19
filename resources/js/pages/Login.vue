@@ -59,18 +59,114 @@
                             >
                                 Login
                             </v-btn>
-                            <!-- <v-btn
+                            <v-btn
                                 rounded
                                 color="primary"
                                 class= "mb-2 px-3"
+                                @click="register()"
                             >
                                 Register
-                            </v-btn> -->
+                            </v-btn>
                         <v-spacer></v-spacer>
                         </v-card-actions>
                     </v-col>
                     </v-card>
                     </v-card>
+                    <v-dialog 
+                        v-model="dialog"
+                        width="500px"
+                        >
+                        <v-card>
+
+                            <v-form
+                                ref="form"
+                                v-model="valid"
+                                lazy-validation
+                            >
+                                <v-card-title>Register</v-card-title>
+                                <v-sheet
+                                class="ma-2"
+                                >
+                                    <v-text-field
+                                        outlined
+                                        label="First Name"
+                                        v-model="payload.first_name"
+                                        :rules="firstRules"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        outlined
+                                        label="Last Name"
+                                        v-model="payload.last_name"
+                                        :rules="lastRules"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        outlined
+                                        label="Age"
+                                        type="number"
+                                        :rules="ageRules"
+                                        v-model="payload.age"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        outlined
+                                        label="Birth Date"
+                                        type="date"
+                                        :rules="birthRules"
+                                        v-model="payload.birthdate"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        outlined
+                                        label="Address"
+                                        :rules="addressRules"
+                                        v-model="payload.address"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        outlined
+                                        label="Contact"
+                                        :rules="contactRules"
+                                        v-model="payload.contact"
+                                        type="number"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        outlined
+                                        label="Email"
+                                        :rules="emailRules"
+                                        v-model="payload.email"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        v-model="payload.password"
+                                        outlined
+                                        :type="isPasswordVisible ? 'text' : 'password'"
+                                        label="Password"
+                                        placeholder="············"
+                                        :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
+                                        @click:append="isPasswordVisible = !isPasswordVisible"
+                                    
+                                    ></v-text-field>
+                                    <v-checkbox
+                                        v-model="payload.medical"
+                                        label="Do you have medical concerns?"
+                                        class="align-label"
+                                    ></v-checkbox>
+                                    <v-checkbox
+                                        v-model="payload.dental"
+                                        label="Do you have dental history?"
+                                    ></v-checkbox>
+                                </v-sheet>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        :disabled="!valid"
+                                        rounded
+                                        color="primary"
+                                        class= "mb-2 px-3"
+                                        @click="save()"
+                                    >
+                                        Submit
+                                </v-btn>
+                                </v-card-actions>
+                            </v-form>
+                        </v-card>
+                    </v-dialog>
                 </div>
      
     </v-sheet>
@@ -96,10 +192,11 @@
 import logo from '../assets/logo.jpg'
 import logocard from '../assets/logocard.png'
 import { mdiEyeOutline, mdiEyeOffOutline } from '@mdi/js'
-import { login } from "../repositories/user.api";
+import { login, store } from "../repositories/user.api";
 export default {
    data() {
     return {
+        valid : true,
         isPasswordVisible: false,
         icons: {
             mdiEyeOutline,
@@ -109,6 +206,44 @@ export default {
         logocard,
         email: '',
         password: '',
+        dialog : false,
+        payload : {
+            first_name: '',
+            last_name : '',
+            age : '',
+            address : '',
+            birthdate : '',
+            contact: '',
+            email : '',
+            password : '',
+            medical: false,
+            dental : false
+        },
+        firstRules: [
+            v => !!v || 'First Name is required',
+        ],
+        lastRules: [
+            v => !!v || 'Last Name is required',
+        ],
+        ageRules: [
+            v => !!v || 'Age is required',
+        ],
+        birthRules: [
+            v => !!v || 'Birth Date is required',
+        ],
+        addressRules: [
+            v => !!v || 'Address is required',
+        ],
+        passwordRules: [
+            v => !!v || 'Password is required',
+        ],
+        contactRules: [
+            v => !!v || 'Contact is required',
+        ],
+        emailRules: [
+            v => !!v || 'E-mail is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        ],
     }
    },
    methods : {
@@ -132,7 +267,34 @@ export default {
         },
         routeAttend(){
             this.$router.push('/attendance');
+        },
+        register(){
+            this.dialog = true
+        },
+        async save(){
+            const isValid = await this.$refs.form.validate();
+                if (isValid) {
+
+                    store(this.payload).then(({data})=> {
+                        console.log(data.data)
+                        this.$refs.form.reset()
+                        this.$refs.form.resetValidation()
+                        this.dialog = false
+                    })
+                    this.dialog = true;
+
+                }
+        },
+        close() {
+            this.payload = ''
+            this.$refs.form.reset()
+            this.$refs.form.resetValidation()
         }
+   },
+   watch : {
+    dialog(val) {
+        val || this.close()
+    }
    }
 }
 </script>
@@ -167,5 +329,13 @@ body {
     padding-left: 2em;
     padding-right: 2em;
 }
+.align-label {
+    display: flex;
+    align-items: center;
+}
+.align-label .v-input--selection-controls {
+    margin-right: 10px;
+}
+
 
 </style>

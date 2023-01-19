@@ -53,7 +53,7 @@ export default {
         logocard,
         items : [
             {title : 'Dashboard', icon: 'mdi-view-dashboard', route: '/'},
-            {title : 'Patients', icon: 'mdi mdi-account-group', route: '/attendee'},
+            {title : 'Patients', icon: 'mdi mdi-account-group', route: '/patient'},
             {title : 'Appointments', icon: 'mdi mdi-account-group', route: '/event'},
             {title : 'Inventory', icon: 'mdi-view-dashboard', route: '/allitems'},
             {title : 'Service', icon: 'mdi-view-dashboard', route: '/service'},

@@ -12,7 +12,6 @@ import VueApexCharts from 'vue-apexcharts'
 Vue.use(VueApexCharts)
 
 Vue.component('apexchart', VueApexCharts)
-
 Vue.mixin(general)
 const app = new Vue({
     router,

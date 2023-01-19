@@ -19,16 +19,6 @@
                     vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
-                    <v-text-field
-                        label="Search"
-                        filled
-                        rounded
-                        dense
-                        class="pt-8"
-                        append-icon="mdi-magnify"
-                        :items="service"
-                        v-model="search"
-                    ></v-text-field>
                     <!-- <div
                     class="pt-1"
                     >
@@ -59,14 +49,13 @@
  </template>
  <script>
 // import Axios from 'axios';
- import { EventPagination } from '../../../repositories/event.api';
+import { Services } from '../../../repositories/service.api';
  export default {
    data: () => ({
      dialog: false,
      dialogDelete: false,
      headers: [
-       { text: 'Service', align: 'start', sortable: false, value: 'service',},
-       { text: 'Action', align: 'start', sortable: false, value: 'actions',},
+       { text: 'Service', align: 'start', sortable: false, value: 'name',},
     //    { text: 'Title', align: 'start', sortable: false, value: 'name',},yyttt
       
      ],
@@ -78,11 +67,17 @@
    watch: {
    },
    mounted(){
+    this.services()
    }, 
  
 
    methods: {
-  
+      services(){
+        Services().then(response => {
+          console.log = response.data
+          this.service = response.data
+        })
+      }
    },
  }
 </script>

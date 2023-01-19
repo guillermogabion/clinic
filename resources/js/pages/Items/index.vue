@@ -1,88 +1,159 @@
 <template>
     <div>
-        <v-col>
-           <v-card min-height="1%" max-height="1%">
-            <div>
-            <v-row
-            class="ma-3"
+        <v-data-table
+                :headers="headers"
+                :items="items"
+                class="elevation-1"
+                hide-default-footer
             >
-                <v-card-title>
-                Items
-                </v-card-title>
-                <v-spacer></v-spacer>
-                <v-row
-                justify="center"
-               
+                <template v-slot:top>
+                <v-toolbar
+                    flat
                 >
-                    <v-col
+                    <v-toolbar-title>Items</v-toolbar-title>
+                    <v-divider
+                    class="mx-4"
+                    inset
+                    vertical
+                    ></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-text-field
+                        v-model="form.search"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                    ></v-text-field>
+                    <div
+                    class="pt-1"
+                    >
+                        <v-btn
+                        color="green"
+                        dark
+                        class="ma-4"
+                        fab
+                        @click="dialog=true"
+                        >
+                          <v-icon 
+                          pa-8
+                          ma-2
+                          size="30"
+                          dark>
+                              mdi-plus
+                            </v-icon>
+                          </v-btn>
+                              
+                        </div>
+                </v-toolbar>
+                <v-dialog
+                v-model="dialog"
+                width="500px"
+                >
+                    <v-card
+                    width="500px"
+                    >
+                    <v-card-title>
+                        Add Item
+                    </v-card-title>
+                    <v-form
+                    ref="form"
+                    v-model="valid"
+                    lazy-validation
+                    >
+                    <v-sheet
                     class="ma-2"
                     >
                         <v-text-field
-                        auto-select-first
-                        :items="items"
-                        filled 
-                        clearable
-                        ref="sfield"
-                        rounded 
-                        v-model="form.search"
-                        dense 
-                        single-line 
-                        append-icon="mdi-magnify" 
-                        class="mx-4 mt-5"
-                    ></v-text-field>
-                    </v-col>
-                    <!-- <v-col
-                    class="ma-2"
-                    >
-                        <v-select
-                        class="pa-2 selects ins"
-                        height="20%"
-                        :items="items"
-                       solo
-                        label="Category"
-                        dense
+                            outlined
+                            label="Item Name"
+                            :rules="nameRules"
+                            v-model="payload.name"
+                        ></v-text-field>
+                        <v-text-field
+                            outlined
+                            label="Item Code"
+                            :rules="codeRules"
+                            v-model="payload.code"
+                        ></v-text-field>
+                        <v-text-field
+                            outlined
+                            label="Item Description"
+                            v-model="payload.description"
+                        ></v-text-field>
+                        <v-text-field
+                            outlined
+                            label="Item Stock"
+                            :rules="stockRules"
+                            v-model="payload.stock"
+                        ></v-text-field>
+                        <v-text-field
+                            outlined
+                            label="Item Price"
+                            v-model="payload.price"
+                            :rules="priceRules"
+                        ></v-text-field>
+                    </v-sheet>
+                    <v-card-actions>
+                        <v-btn
+                            :disabled="!valid"
+                            rounded
+                            color="primary"
+                            class= "mb-2 px-3"
+                            @click="save()"
+                        >
+                            Submit
+                        </v-btn>
+                    </v-card-actions>
+                    
                         
-                        ></v-select>
-                    </v-col> -->
-                </v-row>
-               
-            </v-row>
-            </div>
-           </v-card>
-        </v-col>
-        <v-col>
-           <v-row class="ma-1">
-            <v-col v-for="item in items" :key="item.id"
-                cols="16" :lg="2" :sm="8" :md="2" :xs="10" 
-            >
-            <v-card
-            class="mx-auto"
-            max-width="280"
-            max-height="310"
-            min-height="340"
-            >
-            {{item.name}}
-            {{item.brand}}
-            {{item.description}}
-            {{item.stock}}
-            {{item.sold}}
-            </v-card>
+                    </v-form>
 
-            </v-col>
-
-           </v-row>
-        </v-col>
+                    </v-card>
+                </v-dialog>
+                </template>
+                
+            </v-data-table>
     </div>
 </template>
 <script>
 import axios from '../../plugins/axios';
-
+import { store } from '../../repositories/item.api'
     export default {
         data() {
             return {
+                valid : true,
+                dialog: false,
+                search: '',
                 items: [],
+                headers: [
+                { text: 'Name', align: 'start', sortable: false, value: 'name',},
+                { text: 'Code', align: 'start', sortable: false, value: 'code',},
+                { text: 'Description', align: 'start', sortable: false, value: 'description',},
+                { text: 'Stock', align: 'start', sortable: false, value: 'stock',},
+                { text: 'Price', align: 'start', sortable: false, value: 'price',},
+                
+                ],
                 form : {
                     search: '',
+                },
+                nameRules: [
+                    v => !!v || 'Item Name is required',
+                ],
+                codeRules: [
+                    v => !!v || 'Code is required',
+                ],
+                stockRules: [
+                    v => !!v || 'Stock is required',
+                ],
+                priceRules: [
+                    v => !!v || 'Price is required',
+                ],
+                payload : {
+                    name : '',
+                    code : '',
+                    description : '',
+                    stock : '',
+                    price : ''
                 }
             }
         },
@@ -105,6 +176,21 @@ import axios from '../../plugins/axios';
                 });
                 },800);
             },
+            async save(){
+            const isValid = await this.$refs.form.validate();
+                if (isValid) {
+
+                    store(this.payload).then(({data})=> {
+                        console.log(data.data)
+                        this.$refs.form.reset()
+                        this.$refs.form.resetValidation()
+                        this.searchItem()
+                        this.dialog = false
+                    })
+                    this.dialog = true;
+
+                }
+        },
         },
         watch: {
             "form.search": {

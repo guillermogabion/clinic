@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -36,5 +37,41 @@ class UserController extends Controller
         }
         $token = $user->createToken('authToken')->accessToken;
         return response(['user' => Auth::user(), 'access_token' => $token]);
+    }
+
+    public function store(Request $request)
+    {
+        $data = new User();
+
+        $data->first_name = $request->first_name;
+        $data->last_name = $request->last_name;
+        $data->age = $request->age;
+        $data->birthdate = $request->birthdate;
+        $data->address = $request->address;
+        $data->contact = $request->contact;
+        $data->email = $request->email;
+        $data->password =  Hash::make($request->password);
+        $data->medical = $request->medical;
+        $data->dental = $request->dental;
+
+        $data->save();
+
+        return response()->json([
+            'message' => 'New Patient Info Added',
+            'info' => $data
+        ]);
+    }
+
+    public function pagination(Request $request)
+    {
+        $data = User::query();
+        if ($request->input('keyword') != "") {
+            $keyword = $request->input('keyword');
+
+            $data->where(function ($query) use ($keyword) {
+                $query->where('last_name', 'LIKE', "%$keyword%");
+            });
+        }
+        return $data->where('user_type', 0)->orderBy('last_name', 'asc')->paginate(10);
     }
 }

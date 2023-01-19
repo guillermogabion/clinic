@@ -19,7 +19,7 @@
                 <v-toolbar
                     flat
                 >
-                    <v-toolbar-title>Attendee</v-toolbar-title>
+                    <v-toolbar-title>Patients</v-toolbar-title>
                     <v-divider
                     class="mx-4"
                     inset
@@ -76,14 +76,13 @@
  </template>
  <script>
 // import Axios from 'axios';
- import { ParticipantPagination } from '../../../repositories/participant.api';
+ import { PatientPagination } from '../../../repositories/user.api';
  export default {
    data: () => ({
      dialog: false,
      dialogDelete: false,
      headers: [
        { text: 'Fullname', align: 'start', sortable: false, value: 'fullname',},
-       { text: 'Gender', value: 'gender' },
        { text: 'Age', value: 'age' },
        { text: 'Address', value: 'address' },
        { text: 'Contact', value: 'contact' },
@@ -138,15 +137,14 @@
         this.indexParticipants()
     },
     indexParticipants() {
-      this.url = 'participants/pagination?page='+this.current_page+ '&keyword=' +this.search
+      this.url = 'user/pagination?page='+this.current_page+ '&keyword=' +this.search
       this.loading = true
       if (this.timer) {
         clearTimeout(this.timer);
         this.timer = null;
       }
       this.timer = setTimeout(() => { 
-        ParticipantPagination(this.url).then(({data}) => {
-          console.log(this.url,"index")
+        PatientPagination(this.url).then(({data}) => {
           this.set_data_fromServer(data)
           this.loading = false
         })

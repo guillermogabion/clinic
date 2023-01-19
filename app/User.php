@@ -19,6 +19,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
+    protected $appends = [
+        'fullname'
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -37,4 +40,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function getFullnameAttribute()
+    {
+        $fullname = '';
+        if ($this->first_name) $fullname = ucfirst($this->first_name);
+        if ($this->last_name) $fullname .= ' ' . ucfirst($this->last_name);
+        return $fullname;
+    }
 }

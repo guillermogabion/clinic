@@ -22,4 +22,9 @@ class ServiceController extends Controller
         //     $q->count();
         // })->get();
     }
+
+    public function get_services()
+    {
+        return Services::get();
+    }
 }

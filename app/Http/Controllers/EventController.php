@@ -54,10 +54,10 @@ class EventController extends Controller
         if ($request->input('keyword') != "") {
             $keyword = $request->input('keyword');
             $data->where(function ($query) use ($keyword) {
-                $query->where('name', 'LIKE', "%$keyword%");
+                $query->where('date_reserve', 'LIKE', "%$keyword%");
             });
         }
-        return $data->orderBy('name', 'asc')->paginate(10);
+        return $data->orderBy('date_reserve', 'asc')->with('user', 'service_rend')->paginate(10);
     }
 
     public function count_all()
@@ -67,5 +67,36 @@ class EventController extends Controller
     public function count_today()
     {
         return Event::whereDate('date', Carbon::today())->count();
+    }
+
+    public function get_all()
+    {
+        return Event::with('user', 'service_rend')->get();
+    }
+
+    public function add_appointment(Request $request)
+    {
+        $data = new Event();
+        $data->user_id = Auth::user()->id;
+        $data->service_id = $request->service;
+        $data->date_reserve = $request->picker;
+        $data->save();
+
+        return response()->json([
+            'message' => 'Successfully added a reservation request',
+            'info' => $data
+        ]);
+    }
+
+    public function update_status($id)
+    {
+        $data = Event::where('id', $id)->first();
+        if ($data->status == 0) {
+            $data->update(['status' => 1]);
+            return "Approved";
+        } else {
+            $data->update(['status' => 0]);
+            return "Waiting";
+        }
     }
 }

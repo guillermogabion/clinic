@@ -4,37 +4,111 @@
     <div v-if="$is_admin()">
         <v-row>
             <v-col>
-                <v-card color="green">
-                    <span style="font-size:larger"> Total Number of Appointments</span>
-                    <span style="font-size:larger"> {{ this.appointment }}</span>
+                <v-card color="green" height="100px">
+                    <span style="font-size:larger"> Total Number of Appointments</span><br>
+                    <div align="right" class="pa-2">
+                        <span style="font-size:50px; font-weight: bold;" > {{ this.appointment }}</span>
+                    </div>
                 </v-card>
             </v-col>
             <v-col>
-                <v-card color="red">
-                    <span style="font-size:larger"> Total Number of Items </span>
-                    <span style="font-size:larger"> {{ this.items }} </span>
+                <v-card color="red" height="100px">
+                    <span style="font-size:larger"> Total Number of Items </span><br>
+                    <div align="right" class="pa-2">
+                        <span style="font-size:50px; font-weight: bold;"> {{ this.items }} </span>
+                    </div>
                 </v-card>
             </v-col>
-            <v-col>
-                <v-card color="blue">
-                    <span style="font-size:larger">Number of Today's Schedule</span>
-                    <span style="font-size:larger"> {{ this.app_today }} </span>
-
-                </v-card>
-            </v-col>
+            
         </v-row>
         <v-row>
             <v-col>
-                <div id="chart">
-                    <apexchart  ref="realtimeChart" type="bar" height="350" :options="barChartOptions" :series="chartData"></apexchart>
-                </div>
+                <!-- <div id="chart">
+                    <apexchart  ref="realtimeChart" type="bar" height="400" :options="barChartOptions" :series="chartData2"></apexchart>
+                </div> -->
             </v-col>
             <v-col>
                 <div id="chart2">
-                    <apexchart type="pie" width="380" :options="pieChartOptions" :series="pieSeries"></apexchart>
+                    <!-- <apexchart type="pie" width="380" :options="pieChartOptions" :series="pieSeries"></apexchart> -->
+                    <!-- <apexchart  ref="realtimeChart" type="bar" height="250" :options="barChartOptionsmonth" :series="chartData2"></apexchart> -->
                 </div>
             </v-col>
         </v-row> 
+        <v-row>
+            <v-col>
+                <v-card>
+                    <v-card-title>Bar Graph</v-card-title>
+                     <div id="chart">
+                        <apexchart  ref="realtimeChart" type="bar" height="400" :options="barChartOptions" :series="chartData2"></apexchart>
+                    </div>
+                </v-card>
+
+            </v-col>
+            <v-col>
+                <v-card>
+                    <v-card-title>Pie Graph</v-card-title>
+                </v-card>
+            </v-col>
+        </v-row>
+    </div>
+    <div
+    v-if="$is_user()"
+    >
+    <div class="text-center">
+
+            <v-card
+                width="500"
+                class="mx-auto"
+                elevation="3"
+                color="white"
+            >
+                    <v-card>
+                        <!-- <div
+                         style="padding-top: 4%"
+                        >
+                        <v-img 
+                        contain
+                        :src="logocard"
+                        max-height="30%"
+                        width="50%"
+                        class="mx-auto"
+                        />
+                    </div> -->
+                    <span class="login_title">Dental Clinic</span>
+                    <v-col>
+                        <span style="font-weight:bold; ">Set an Appointment</span>
+                        <v-select
+                            filled
+                            rounded
+                            dense
+                            :items="service"
+                            v-model="payload.service"
+                            label="Select Service"
+                            item-text="name"
+                            item-value="id"
+                        ></v-select>
+                        <v-text-field 
+                            v-model="payload.picker"
+                            filled
+                            rounded
+                            dense
+                            readonly
+                        ></v-text-field>
+                        <v-date-picker 
+                            v-model="payload.picker" 
+                            :allowed-dates="isNotWeekend"></v-date-picker>
+                        <v-card-actions>
+                        <v-spacer></v-spacer>
+                          <v-btn
+                          @click="addAppointment()"
+                          color="primary"
+                          >Submit</v-btn>
+                        <v-spacer></v-spacer>
+                        </v-card-actions>
+                    </v-col>
+                </v-card>
+            </v-card>
+        </div>
     </div>
 
 </v-slide-x-transition>
@@ -43,28 +117,31 @@
 <script>
 import Axios from '../../plugins/axios';
 import PureVueChart from 'pure-vue-chart';
+import { addAppointment } from '../../repositories/event.api'
 export default {
     data() {
         return {
-            chartOptions: {
-                chart: {
-                    type: 'bar'
-                },
-                xaxis: {
-                    categories: []
-                },
-                series: [{
-                    name: 'Sales',
-                    data: []
-                }]
-                },
-              
+           
+            chartData: [{
+                name: 'Statistics',
+                data: []
+            }],
+            date: new Date(),
             appointment : '',
             app_today : '',
             items: '',
             service: [],
             chartData: [],
             chartData2: [],
+            chartDatapie: [],
+            chartDatapie2: [],
+            pie: [],
+            payload : {
+                service: [],
+                picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+
+            }
+            
             
            
    
@@ -74,6 +151,10 @@ export default {
         PureVueChart,
     },
     methods: {
+        isNotWeekend(date) {
+        var d = new Date(date);
+        return d.getDay() !== 0 && d.getDay() !== 6;
+        },
        count_appointment(){
             Axios.get('count_appointment').then(response => {
                 console.log(response.data)
@@ -119,10 +200,36 @@ export default {
                 delete item.updated_at;
                 return value;
             });
-            console.log(filteredArray, 'filtered')
+            console.log(filteredArray, 'filtered')  
             this.chartData2 = filteredArray
             })
+        },
+        pie_labels(){
+            Axios.get('get_all_reserve').then(response => {
+                console.log(response.data, 'pie_labels')
+
+                let pie = response.data
+                let singleArray = [].concat.apply([], pie.map(x=> x));
+                let filteredArray = singleArray.map(item=> {
+                    let value = item.name
+                    delete item.id;
+                    delete item.reserve_count;
+                    delete item.created_at;
+                    delete item.updated_at;
+                    return value;
+                });
+                console.log(filteredArray, 'labels_pie')
+                this.pie = filteredArray
+
+            })
+        },
+
+        addAppointment(){
+            addAppointment(this.payload).then(response => {
+                console.log(response.data)
+            })
         }
+       
     },
     async mounted(){
         this.count_appointment()
@@ -130,9 +237,14 @@ export default {
         this.count_item()
         this.get_services()
         this.get_chartData()
+        this.pie_labels()
+    },
+    created(){
      
     },
     computed :{
+
+       
     //     chartData() {
     // Axios.get('get_all_services')
     //   .then(response => {
@@ -194,32 +306,56 @@ export default {
             return series
             
         },
-        pieChartOptions () {
-            let labels = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'];
+        barChartOptionsmonth(){
             return {
                 chart: {
-                width: 380,
-                type: 'pie',
+                    type: 'bar',
+                    height: 350
                 },
-                responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                    width: 200
-                    },
-                    legend: {
-                    position: 'bottom'
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
                     }
                 },
-                labels : labels
-                }]
+                dataLabels: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Sales',
+                    data: this.chartData2
+                }],
+                xaxis: {
+                    categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                }
             }
-
         },
-        pieSeries() {
-            let series = [44, 55, 13, 43, 22];
-            return series
-        }
+        // pieChartOptions () {
+        //     let labels = this.pie;
+        //     return {
+        //         colors : ['yellow', 'green', 'blue', 'red', 'violet', 'pink', 'orange', 'beige'] ,
+        //         chart: {
+        //             width: "100%",
+        //             type: 'pie',
+        //             toolbar: {
+        //                 show: false
+        //             },
+        //             zoom: {
+        //                 enabled: false
+        //             }
+        //         },
+        //         labels: labels
+        //     }
+           
+        // },
+        // pieSeries(){
+        //     let series = []
+        //     if (this.chartData2){
+        //         this.chartData2.forEach(data=> {
+        //             series.push(data)
+        //         })
+        //     }
+        //     return series
+        // },
         
     }
 }

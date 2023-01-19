@@ -1,5 +1,6 @@
 import Main from '../pages/Main.vue'
 import Login from '../pages/Login.vue'
+import Front from '../pages/Front.vue'
 import Dashboard from '../pages/Admin/Dashboard.vue'
 // employee 
 import Employee from '../pages/Admin/Employee/index.vue'
@@ -21,21 +22,22 @@ import Attendance from '../pages/Attendance.vue'
 
 import AllItems from '../pages/Items/index.vue'
 
-import Service from '../pages/Admin/Service/index'
+import Services from '../pages/Admin/Service/index.vue'
 
 
 export default [{
-    path: '/',
+    path: '/dashboard',
     component: Main,
     meta: { authOnly: true },
     children: [
         {
-            path: '/',
+            path: '/dashboard',
+            name: 'dashboard',
             component: Dashboard,
             meta: { authOnly: true },
         },
         {
-            path: '/dashboard',
+            path: '/',
             name: 'dashboard',
             component: Dashboard,
             meta: { authOnly: true },
@@ -57,7 +59,7 @@ export default [{
         },
         // employee 
         {
-            path: '/attendee',
+            path: '/patient',
             name: 'attendee',
             component: Employee,
             meta: { authOnly: true },
@@ -73,13 +75,6 @@ export default [{
         },
 
         {
-            path: '/service',
-            name: 'service',
-            component: Service,
-            meta: { authOnly: true },
-        },
-
-        {
             path: '/event',
             name: 'event',
             component: Event,
@@ -90,6 +85,12 @@ export default [{
             path: '/about',
             name: 'about',
             component: About,
+            meta: { authOnly: true },
+        },
+        {
+            path: '/service',
+            name: 'service',
+            component: Services,
             meta: { authOnly: true },
         },
 
@@ -138,6 +139,12 @@ export default [{
 },
 {
     path: '/login',
+    name: 'login',
+    component: Login,
+    meta: { authOnly: false },
+},
+{
+    path: '/',
     name: 'login',
     component: Login,
     meta: { authOnly: false },

@@ -11,7 +11,8 @@ class Event extends Model
         'name',
         'color',
         'start',
-        'end'
+        'end',
+        'status'
     ];
 
     public function record_event()
@@ -21,6 +22,11 @@ class Event extends Model
 
     public function service_rend()
     {
-        return $this->belongsTo(Service::class, 'service_id');
+        return $this->belongsTo(Services::class, 'service_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

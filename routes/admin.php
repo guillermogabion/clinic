@@ -8,15 +8,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ServiceController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::group(['prefix' => '/v1'], function () {
     Route::post('login', [UserController::class, 'login'])->name('login');
+    Route::post('new-patient', [UserController::class, 'store']);
 });
 Route::group(['prefix' => '/v1', 'middleware' => ['auth:admin-api']], function () {
 
     Route::get('self', 'UserController@self');
     Route::get('user', 'UserController@index');
     Route::get('index-event', [EventController::class, 'index']);
+    Route::get('user/pagination', [UserController::class, 'pagination']);
     Route::get('/fit', 'ParticipantController@index');
 
     Route::post('participant', [ParticipantController::class, 'store']);
@@ -31,17 +34,14 @@ Route::group(['prefix' => '/v1', 'middleware' => ['auth:admin-api']], function (
     Route::delete('event/{id}', [EventController::class, 'destroy']);
     Route::get('events/pagination', [EventController::class, 'pagination']);
 
-    Route::post('record', [RecordController::class, 'store']);
-    Route::post('record-destroy/{id}', [RecordController::class, 'destroy']);
-    Route::post('record/pagination', [RecordController::class, 'destroy']);
+    Route::post('add-appointment', [EventController::class, 'add_appointment']);
+    Route::put('update-status/{id}', [EventController::class, 'update_status']);
 
-    // category 
-    Route::get('show-category', [CategoryController::class, 'index']);
-    Route::post('add-category', [CategoryController::class, 'store']);
 
     // item 
     Route::get('items/pagination', [ItemController::class, 'pagination']);
     Route::post('items-search', [ItemController::class, 'search']);
+    Route::post('add-item', [ItemController::class, 'store']);
 
     Route::get('get', [RecordController::class, 'get']);
 
@@ -53,4 +53,11 @@ Route::group(['prefix' => '/v1', 'middleware' => ['auth:admin-api']], function (
 
     Route::get('get_all_services', [ServiceController::class, 'get_all']);
     Route::get('get_all_reserve', [ServiceController::class, 'get_reserve']);
+
+    // service 
+
+    Route::get('get-service', [ServiceController::class, 'get_services']);
+
+    // Dashboard 
+    Route::post('monthly-stats', 'DashboardController@charts');
 });

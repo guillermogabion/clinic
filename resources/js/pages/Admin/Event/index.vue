@@ -58,6 +58,12 @@
                         </div> -->
                 </v-toolbar>
                 </template>
+                <template v-slot:item.actions ="{ item }">
+                  <v-switch
+                    v-model="item.status"
+                    @click="appointment(item)"
+                  ></v-switch>
+                </template>
                 
             </v-data-table>
             <div class="text-center pt-2">
@@ -75,15 +81,16 @@
  </template>
  <script>
 // import Axios from 'axios';
- import { EventPagination } from '../../../repositories/event.api';
+ import { EventPagination, acceptAppointment  } from '../../../repositories/event.api';
  export default {
    data: () => ({
+      switch1:false,
      dialog: false,
      dialogDelete: false,
      headers: [
-       { text: 'Patient', align: 'start', sortable: false, value: 'fullname',},
-       { text: 'Service', align: 'start', sortable: false, value: 'service',},
-       { text: 'Date', align: 'start', sortable: false, value: 'date',},
+       { text: 'Patient', align: 'start', sortable: false, value: 'user.fullname',},
+       { text: 'Service', align: 'start', sortable: false, value: 'service_rend.name',},
+       { text: 'Date', align: 'start', sortable: false, value: 'date_reserve',},
        { text: 'Action', align: 'start', sortable: false, value: 'actions',},
     //    { text: 'Title', align: 'start', sortable: false, value: 'name',},yyttt
       
@@ -153,6 +160,11 @@
     },
     add(){
       this.$router.push('/attendee/add')
+    },
+    appointment(item){
+      acceptAppointment(item.id).then(response => {
+        console.log(response.data)
+      })
     }
    
   
