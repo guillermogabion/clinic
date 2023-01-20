@@ -64,6 +64,11 @@
                     @click="appointment(item)"
                   ></v-switch>
                 </template>
+                <template v-slot:item.clock ="{ item }">
+                  <v-icon>
+                    mdi-clock-alert-outline
+                  </v-icon>
+                </template>
                 
             </v-data-table>
             <div class="text-center pt-2">
@@ -91,7 +96,9 @@
        { text: 'Patient', align: 'start', sortable: false, value: 'user.fullname',},
        { text: 'Service', align: 'start', sortable: false, value: 'service_rend.name',},
        { text: 'Date', align: 'start', sortable: false, value: 'date_reserve',},
-       { text: 'Action', align: 'start', sortable: false, value: 'actions',},
+       { text: 'Time', align: 'start', sortable: false, value: 'time',},
+       { text: 'Approve', align: 'start', sortable: false, value: 'actions'},
+       { text: 'Change Time', align: 'start', sortable: false, value: 'clock'},
     //    { text: 'Title', align: 'start', sortable: false, value: 'name',},yyttt
       
      ],

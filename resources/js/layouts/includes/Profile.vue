@@ -90,7 +90,7 @@
       },
       isHistory(){
         axios.get('get-history').then(response => {
-          console.log = response.data
+          console.log(response.data)
           this.history = response.data
         })
       }

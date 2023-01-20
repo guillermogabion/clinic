@@ -63,4 +63,8 @@ Route::group(['prefix' => '/v1', 'middleware' => ['auth:admin-api']], function (
 
 
     Route::get('get-history', 'EventController@get_all_history');
+
+    Route::post('search-service', [ServiceController::class, 'search_service']);
+
+    Route::get('get-record/{id}', [UserController::class, 'get_record']);
 });

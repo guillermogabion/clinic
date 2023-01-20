@@ -29,4 +29,9 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function one_array()
+    {
+        return $this->hasMany(Services::class);
+    }
 }

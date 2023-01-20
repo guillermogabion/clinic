@@ -47,4 +47,9 @@ class User extends Authenticatable
         if ($this->last_name) $fullname .= ' ' . ucfirst($this->last_name);
         return $fullname;
     }
+
+    public function service()
+    {
+        return $this->hasMany(Event::class, 'user_id');
+    }
 }

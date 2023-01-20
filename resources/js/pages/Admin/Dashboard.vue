@@ -116,15 +116,14 @@
                                 ></v-time-picker>
                             </v-col>
                         </v-row>
-                        <span>Service Cost : {{ this.service.price }}</span><br>
-                        <span>Appointment Fee : 100Php</span>
-                        <span style="display: none;">{{ this.payload.cost = this.service.price + 100 }}</span>
+                        <span>Service Cost : {{ services.price }}</span><br>
+                        <span>Appointment Fee : 100Php</span><br>
                         <v-text-field 
-                            v-model="payload.cost"
+                            :value="totalCost()"
+                            type="number"
                             filled
                             rounded
                             dense
-                            readonly
                             label="Total Cost"
                         ></v-text-field>
                        
@@ -172,9 +171,11 @@ export default {
             payload : {
                 service: [],
                 picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-                time : ''
+                time : '',
+                cost : ''
             },
-            alert: false
+            alert: false,
+            services: ''
             
            
    
@@ -258,10 +259,20 @@ export default {
         },
 
         addAppointment(){
+            this.payload.cost = this.totalCost()
             addAppointment(this.payload).then(response => {
                 console.log(response.data)
                 alert('Appointment request Submitted');
             })
+        },
+       searchService(key){
+            Axios.post('search-service', {searchkey:key}).then(response => {
+                this.services = response.data
+                console.log(response.data)
+            })
+        },
+        totalCost(){
+           return Number(this.services.price) + Number(100);
         }
        
     },
@@ -276,6 +287,14 @@ export default {
     created(){
      
     },
+    watch : {
+        "payload.service" : {
+            handler(val) {
+            this.searchService(val)
+            },
+            deep: true,
+        }
+    },  
     computed :{
 
        
@@ -391,6 +410,7 @@ export default {
         //     return series
         // },
         
-    }
+    },
+    
 }
 </script>

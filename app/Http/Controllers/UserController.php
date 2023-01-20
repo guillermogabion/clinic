@@ -76,4 +76,10 @@ class UserController extends Controller
         }
         return $data->where('user_type', 0)->orderBy('last_name', 'asc')->paginate(10);
     }
+
+    public function get_record($id)
+    {
+        $data = User::where('id', $id)->with('service.service_rend')->first();
+        return $data;
+    }
 }

@@ -36,6 +36,8 @@
                         :items="participants"
                         v-model="search"
                     ></v-text-field>
+                    
+                
                     <!-- <div
                     class="pt-1"
                     >
@@ -59,7 +61,13 @@
                         </div> -->
                 </v-toolbar>
                 </template>
-                
+                <template v-slot:item.actions ="{ item }">
+                  <v-icon
+                  @click="show(item)"
+                  >
+                    mdi mdi-file-document-box-multiple
+                  </v-icon>
+                </template>
             </v-data-table>
             <div class="text-center pt-2">
               <v-pagination
@@ -69,6 +77,30 @@
               
             ></v-pagination>
             </div>
+            <v-dialog
+            v-model="dialog_record"
+            width="700px"
+            >
+              <v-card
+              width="700px"
+              >
+               <!-- {{ this.record.service }} -->
+
+               <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="items in record" :key="items.id">
+                    <td>{{ items.fullname }}</td>
+                  </tr>
+                </tbody>
+              </table>
+                
+              </v-card>
+            </v-dialog>
 
 
         </v-card>
@@ -76,17 +108,26 @@
  </template>
  <script>
 // import Axios from 'axios';
+import Axios from '../../../plugins/axios';
  import { PatientPagination } from '../../../repositories/user.api';
  export default {
    data: () => ({
      dialog: false,
+     dialog_record: false,
      dialogDelete: false,
      headers: [
        { text: 'Fullname', align: 'start', sortable: false, value: 'fullname',},
        { text: 'Age', value: 'age' },
        { text: 'Address', value: 'address' },
        { text: 'Contact', value: 'contact' },
-       { text: 'Actions', value: 'actions', sortable: false },
+       { text: 'Records', align: 'start', sortable: false, value: 'actions'},
+     ],
+     headersRecord: [
+       { text: 'Service', align: 'start', sortable: false, value: 'service.service_rend'},
+       { text: 'Age', value: 'age' },
+       { text: 'Address', value: 'address' },
+       { text: 'Contact', value: 'contact' },
+       { text: 'Records', align: 'start', sortable: false, value: 'actions'},
      ],
      loading: false,
      participants: [],
@@ -96,6 +137,7 @@
       total_participants:0,
       page:1,
       current_page:0,
+      record: [],
    }),
   
    watch: {
@@ -152,9 +194,14 @@
     },
     add(){
       this.$router.push('/attendee/add')
+    },
+    show(item){
+      Axios.get('get-record/' + item.id).then((response) => {
+        this.dialog_record = true
+        this.record = response.data
+        console.log(response.data)
+      })
     }
-   
-  
    },
  }
 </script>

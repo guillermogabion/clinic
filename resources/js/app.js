@@ -8,6 +8,7 @@ import App from './layouts/App.vue';
 import general from './mixins/general.vue'
 import store from './store';
 import Vue from 'vue';
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import VueApexCharts from 'vue-apexcharts'
 Vue.use(VueApexCharts)
 

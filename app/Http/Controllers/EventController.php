@@ -80,7 +80,7 @@ class EventController extends Controller
         $data->user_id = Auth::user()->id;
         $data->service_id = $request->service;
         $data->date_reserve = $request->picker;
-        $data->date_reserve = $request->time;
+        $data->time = $request->time;
         $data->cost = $request->cost;
         $data->save();
 
